@@ -8,3 +8,5 @@ all 	: graph.o main.o
 %.o	: %.c
 	$(CXX) -c $@ $(CXXFLAGS)
 
+clean	:
+	rm *.o main

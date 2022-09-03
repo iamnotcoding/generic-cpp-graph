@@ -1,61 +1,43 @@
 #include <iostream>
+#include <memory>
 #include <vector>
+#include <string>
 
-struct Edge
-{
-	int v1;
-	int v2;
-	double w;
-
-	Edge(int v1, int v2, double w = 1) : v1(v1), v2(v2), w(w)
-	{
-	}
-
-	bool operator==(const Edge &rhs)
-	{
-		bool result = false;
-
-		if ((v1 == rhs.v1 && v2 == rhs.v2) || (v1 == rhs.v2 && v2 == rhs.v1))
-		{
-			result = true;
-		}
-
-		return result;
-	}
-
-    bool operator!=(const Edge &rhs)
-    {
-        bool result = !operator==(rhs);
-
-        return result;
-    }
-};
+#include "edge.hpp"
 
 class Graph
 {
   public:
-	bool Adjacent(int from, int to); // tests whether there is an edge from the
-									 // vertex 'from to the vertex 'to';
-	void Neighbors(int v); // lists all vertices 'v' such that there is an edge
-						   // from the vertex 'v' to the vertex y;
-	void AddVertex(int v); // adds the vertex 'v', if it is not there;
-	void RemoveVertex(int v); // removes the vertex 'v', if it is there;
-	void AddEdge(int from, int to,
-				 double w); // adds the edge from the vertex 'from' to
-							// the vertex 'to', if it is not there;
-	void RemoveEdge(int from,
-					int to); // removes the edge from the vertex 'from' to the
-							 // vertex 'to', if it is there;
-	float GetEdgeValue(
-		int v1,
-		int v2); // returns the value associated with the edge (from, to);
-	void SetEdgeValue(
-		int v1, int v2,
-		double w); // sets the value associated with the edge (from, tp) to w.
-  private:
-	// std::pair<vertex number, connected vertexes>
-	bool IsEdgeSame(Edge x, Edge y);
+	// returns whether there is an edge from the vertex 'from' to the vertex 'to'
+	bool IsAdjacent(std::string from, std::string to);
+	// lists all vertices 'v' such that there is an edge from the vertex 'v' to
+	// the vertex y;
+	const std::vector<std::string> &Neighbors(std::string v);
+	// adds the vertex 'v', if it is not there;
+	void AddVertex(std::string v);
+	// removes the vertex 'v', if it is there;
+	void RemoveVertex(std::string v);
+	// returns the value associated with the vertex x;
+	void *GetVertexValue(std::string v);
+	// sets the value associated with the vertex x to v.
+	void SetVertexValue(std::string v, void *val);
+	// adds the edge from the vertex 'from' to the vertex 'to', if it is not
+	// there;
+	void AddEdge(std::string from, std::string to, double w = 1);
+	// removes the edge from the vertex 'from' to the vertex 'to', if it is
+	// there;
+	void RemoveEdge(std::string from, std::string to);
+	// returns the weigh associated with the edge (v1, v2) or vice versa
+	double GetEdgeWeight(std::string v1, std::string v2);
+	// sets the weigh associated with the edge (v1, v2) or vice versa.
+	void SetEdgeWeight(std::string v1, std::string v2, double w);
 
-	std::vector<std::pair<int, std::vector<int>>> adjList;
+  private:
+	std::vector<std::pair<std::pair<std::string, void *>, std::vector<std::string>>> GetVertex(std::string v);
+
 	std::vector<Edge> edges;
+
+	// std::pair<std::pair<vertex, vertex data(nullptr if none)>, adjacent
+	// vertexes>
+	std::vector<std::pair<std::pair<std::string, void *>, std::vector<std::string>>> adjList;
 };
