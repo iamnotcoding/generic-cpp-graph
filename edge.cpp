@@ -1,3 +1,0 @@
-#include "edge.hpp"
-
-// empty
