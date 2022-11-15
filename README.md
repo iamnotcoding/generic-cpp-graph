@@ -1,4 +1,4 @@
-# graph library in c++
+# generic graph library in c++
 ## This graph implementation is based on the that of the wikipedia :<a href=https://en.wikipedia.org/wiki/Graph_(abstract_data_type)#Operations> link </a>
 
 ### This libaray is header-only
