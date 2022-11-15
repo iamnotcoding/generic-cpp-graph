@@ -36,8 +36,8 @@ or
 #### How to check wether a vertex exists
     g.IsVertexExist("vertex name");
 #### How to add an edge
-*edges are directed (the weight defaults to 0)*
-*"from", "to" != "to", "from"*
+*edges are directed "from", "to" != "to", "from"*
+*(the weight defaults to 0)*
 
     g.AddEdge("from", "to");
 
