@@ -61,7 +61,7 @@ template <typename VertexData_t = VoidVertexData> class Graph
 	void SetVertexData(const std::string &v, const VertexData_t &data);
 	/* Adds the edge from the vertex 'from' to the vertex 'to', if it is not
 	there. */
-	void AddEdge(const std::string &from, const std::string &to, double w = 1);
+	void AddEdge(const std::string &from, const std::string &to);
 	/* removes the edge from the vertex 'from' to the vertex 'to', if it is
 	 there. */
 	void RemoveEdge(const std::string &from, const std::string &to);
@@ -84,14 +84,21 @@ template <typename VertexData_t = VoidVertexData> class Graph
 		return Neighbors(v);
 	}
 
-	// The same as lhs.AddVertex(Rhs).
-	Graph<VertexData_t> &operator+=(const std::string &Rhs)
+	// The same as lhs.AddVertex(rhs).
+	Graph<VertexData_t> &operator+=(const std::string &rhs)
 	{
-		AddVertex(Rhs);
+		AddVertex(rhs);
 
 		return *this;
 	}
 
+	// The same as lhs.RemoveVertex(rhs).
+	Graph<VertexData_t> &operator-=(const std::string &rhs)
+	{
+		RemoveVertex(rhs);
+
+		return *this;
+	}
   private:
 	typename std::unordered_map<std::string, Vertex<VertexData_t>> vertexes;
 	typename std::unordered_map<std::string, Vertex<VertexData_t>>::iterator
@@ -211,7 +218,7 @@ void Graph<VertexData_t>::SetVertexData(const std::string &v,
 
 template <typename VertexData_t>
 void Graph<VertexData_t>::AddEdge(const std::string &from,
-								  const std::string &to, double w)
+								  const std::string &to)
 {
 	typename std::unordered_map<std::string, Vertex<VertexData_t>>::iterator
 		fromVertex = GetVertex(from);
