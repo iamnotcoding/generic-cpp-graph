@@ -72,6 +72,8 @@ template <typename VertexData_t = VoidVertexData> class Graph
 					   double w);
 	// Returns true if the vertex exists, otherwise returns false.
 	bool IsVertexExist(const std::string &v);
+	// Gets all the vertexes
+	std::vector<std::string> GetAllVertexes();
 	// Clears the graph.
 	void Clear()
 	{
@@ -341,6 +343,19 @@ void Graph<VertexData_t>::SetEdgeWeight(const std::string &from,
 
 	fromVertex->second
 		.weights[fromVertex->second.neighbors.begin() - toVertex] = w;
+}
+
+template <typename VertexData_t>
+std::vector<std::string> Graph<VertexData_t>::GetAllVertexes()
+{
+	std::vector<std::string> result;
+
+	for (auto &e : vertexes)
+	{
+		result.push_back(e.first);
+	}
+
+	return result;
 }
 
 #endif

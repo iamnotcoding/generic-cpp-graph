@@ -56,6 +56,8 @@ or
 or
 
     g["v"];
+#### How to Get all the vertexes
+    g.GetAllVertexes();
 
 #### How to get the numbers of neighbors
 *Don't worry, this operation is O(1)*
