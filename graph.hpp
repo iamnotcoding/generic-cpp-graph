@@ -11,7 +11,7 @@
  * copied */
 class VoidVertexData
 {
-	VoidVertexData(const VoidVertexData &) = delete;
+	VoidVertexData(const VoidVertexData&) = delete;
 };
 
 template <typename VertexData_t> struct Vertex
@@ -24,15 +24,15 @@ template <typename VertexData_t> struct Vertex
 		}
 	}
 
-	VertexData_t *data = nullptr;
+	VertexData_t* data = nullptr;
 	std::vector<std::string> neighbors;
-	std::vector<double> weights;
+	std::unordered_map<std::string, double> weights;
 };
 
 // Graph<vertex data type(defaults to VoidVertexData)>
 template <typename VertexData_t = VoidVertexData> class Graph
 {
-  public:
+public:
 	Graph() = default;
 
 	// Gets list of vertexes
@@ -46,32 +46,32 @@ template <typename VertexData_t = VoidVertexData> class Graph
 
 	/* Returns whether there is an edge from the vertex 'from' to the vertex
 	 'to'. */
-	bool IsAdjacent(const std::string &from, const std::string &to);
+	bool IsAdjacent(const std::string& from, const std::string& to);
 	/* Returns a std::vector of vertics adjacent to v. */
-	const std::vector<std::string> &Neighbors(const std::string &v);
+	const std::vector<std::string>& Neighbors(const std::string& v);
 	// Adds the vertex 'v', if it is not there.
-	void AddVertex(const std::string &v);
+	void AddVertex(const std::string& v);
 	// Removes the vertex 'v', if it is there.
-	void RemoveVertex(const std::string &v);
+	void RemoveVertex(const std::string& v);
 	/* Returns the data associated with the vertex x.
 	The data will be copied so VertexData_t requires a copy constructor. */
-	VertexData_t GetVertexData(const std::string &v);
+	VertexData_t GetVertexData(const std::string& v);
 	/* Sets the data associated with the vertex x to v.
 	 The data will be copied so VertexData_t requires a copy constructor. */
-	void SetVertexData(const std::string &v, const VertexData_t &data);
+	void SetVertexData(const std::string& v, const VertexData_t& data);
 	/* Adds the edge from the vertex 'from' to the vertex 'to', if it is not
 	there. */
-	void AddEdge(const std::string &from, const std::string &to);
+	void AddEdge(const std::string& from, const std::string& to);
 	/* removes the edge from the vertex 'from' to the vertex 'to', if it is
 	 there. */
-	void RemoveEdge(const std::string &from, const std::string &to);
+	void RemoveEdge(const std::string& from, const std::string& to);
 	// returns the weigh associated with the edge (from, to).
-	double GetEdgeWeight(const std::string &from, const std::string &to);
+	double GetEdgeWeight(const std::string& from, const std::string& to);
 	// sets the weigh associated with the edge (from, to).
-	void SetEdgeWeight(const std::string &from, const std::string &to,
-					   double w);
+	void SetEdgeWeight(const std::string& from, const std::string& to,
+		double w);
 	// Returns true if the vertex exists, otherwise returns false.
-	bool IsVertexExist(const std::string &v);
+	bool IsVertexExist(const std::string& v);
 	// Gets all the vertexes
 	std::vector<std::string> GetAllVertexes();
 	// Clears the graph.
@@ -81,13 +81,13 @@ template <typename VertexData_t = VoidVertexData> class Graph
 	}
 
 	// The same as graph.Neighbors(v).
-	const std::vector<std::string> &operator[](const std::string &v)
+	const std::vector<std::string>& operator[](const std::string& v)
 	{
 		return Neighbors(v);
 	}
 
 	// The same as lhs.AddVertex(rhs).
-	Graph<VertexData_t> &operator+=(const std::string &rhs)
+	Graph<VertexData_t>& operator+=(const std::string& rhs)
 	{
 		AddVertex(rhs);
 
@@ -95,27 +95,27 @@ template <typename VertexData_t = VoidVertexData> class Graph
 	}
 
 	// The same as lhs.RemoveVertex(rhs).
-	Graph<VertexData_t> &operator-=(const std::string &rhs)
+	Graph<VertexData_t>& operator-=(const std::string& rhs)
 	{
 		RemoveVertex(rhs);
 
 		return *this;
 	}
-  private:
+private:
 	typename std::unordered_map<std::string, Vertex<VertexData_t>> vertexes;
 	typename std::unordered_map<std::string, Vertex<VertexData_t>>::iterator
-	GetVertex(const std::string &v);
+		GetVertex(const std::string& v);
 };
 
 template <typename VertexData_t>
 typename std::unordered_map<std::string, Vertex<VertexData_t>>::iterator Graph<
-	VertexData_t>::GetVertex(const std::string &v)
+	VertexData_t>::GetVertex(const std::string& v)
 {
 	return vertexes.find(v);
 }
 
 template <typename VertexData_t>
-bool Graph<VertexData_t>::IsVertexExist(const std::string &v)
+bool Graph<VertexData_t>::IsVertexExist(const std::string& v)
 {
 	if (GetVertex(v) != vertexes.end())
 	{
@@ -128,8 +128,8 @@ bool Graph<VertexData_t>::IsVertexExist(const std::string &v)
 }
 
 template <typename VertexData_t>
-bool Graph<VertexData_t>::IsAdjacent(const std::string &from,
-									 const std::string &to)
+bool Graph<VertexData_t>::IsAdjacent(const std::string& from,
+	const std::string& to)
 {
 	typename std::unordered_map<std::string, Vertex<VertexData_t>>::iterator
 		fromVertex = GetVertex(from);
@@ -141,8 +141,8 @@ bool Graph<VertexData_t>::IsAdjacent(const std::string &from,
 	}
 
 	if (std::find(fromVertex->second.neighbors.begin(),
-				  fromVertex->second.neighbors.end(),
-				  to) == fromVertex->second.neighbors.end())
+		fromVertex->second.neighbors.end(),
+		to) == fromVertex->second.neighbors.end())
 	{
 		result = false;
 	}
@@ -151,8 +151,8 @@ bool Graph<VertexData_t>::IsAdjacent(const std::string &from,
 }
 
 template <typename VertexData_t>
-const std::vector<std::string> &Graph<VertexData_t>::Neighbors(
-	const std::string &v)
+const std::vector<std::string>& Graph<VertexData_t>::Neighbors(
+	const std::string& v)
 {
 	if (GetVertex(v) == vertexes.end())
 	{
@@ -163,7 +163,7 @@ const std::vector<std::string> &Graph<VertexData_t>::Neighbors(
 }
 
 template <typename VertexData_t>
-void Graph<VertexData_t>::AddVertex(const std::string &v)
+void Graph<VertexData_t>::AddVertex(const std::string& v)
 {
 	if (IsVertexExist(v))
 	{
@@ -174,7 +174,7 @@ void Graph<VertexData_t>::AddVertex(const std::string &v)
 }
 
 template <typename VertexData_t>
-void Graph<VertexData_t>::RemoveVertex(const std::string &v)
+void Graph<VertexData_t>::RemoveVertex(const std::string& v)
 {
 	typename std::unordered_map<std::string, Vertex<VertexData_t>>::iterator
 		destVertex = GetVertex(v);
@@ -190,7 +190,7 @@ void Graph<VertexData_t>::RemoveVertex(const std::string &v)
 }
 
 template <typename VertexData_t>
-VertexData_t Graph<VertexData_t>::GetVertexData(const std::string &v)
+VertexData_t Graph<VertexData_t>::GetVertexData(const std::string& v)
 {
 	typename std::unordered_map<std::string, Vertex<VertexData_t>>::iterator
 		destVertex = GetVertex(v);
@@ -204,8 +204,8 @@ VertexData_t Graph<VertexData_t>::GetVertexData(const std::string &v)
 }
 
 template <typename VertexData_t>
-void Graph<VertexData_t>::SetVertexData(const std::string &v,
-										const VertexData_t &data)
+void Graph<VertexData_t>::SetVertexData(const std::string& v,
+	const VertexData_t& data)
 {
 	typename std::unordered_map<std::string, Vertex<VertexData_t>>::iterator
 		destVertex = GetVertex(v);
@@ -219,8 +219,8 @@ void Graph<VertexData_t>::SetVertexData(const std::string &v,
 }
 
 template <typename VertexData_t>
-void Graph<VertexData_t>::AddEdge(const std::string &from,
-								  const std::string &to)
+void Graph<VertexData_t>::AddEdge(const std::string& from,
+	const std::string& to)
 {
 	typename std::unordered_map<std::string, Vertex<VertexData_t>>::iterator
 		fromVertex = GetVertex(from);
@@ -238,16 +238,16 @@ void Graph<VertexData_t>::AddEdge(const std::string &from,
 	if (IsAdjacent(from, to))
 	{
 		throw std::runtime_error("edge " + from + " to " + to +
-								 " already exists");
+			" already exists");
 	}
 
 	fromVertex->second.neighbors.push_back(to);
-	fromVertex->second.weights.push_back(0);
+	fromVertex->second.weights[to] = 0;
 }
 
 template <typename VertexData_t>
-void Graph<VertexData_t>::RemoveEdge(const std::string &from,
-									 const std::string &to)
+void Graph<VertexData_t>::RemoveEdge(const std::string& from,
+	const std::string& to)
 {
 	typename std::unordered_map<std::string, Vertex<VertexData_t>>::iterator
 		fromVertex = GetVertex(from);
@@ -268,16 +268,16 @@ void Graph<VertexData_t>::RemoveEdge(const std::string &from,
 	if (!IsAdjacent(from, to))
 	{
 		throw std::runtime_error("edge " + from + "and " + to +
-								 " doesn't exist");
+			" doesn't exist");
 	}
 
 	fromVertex.neighbors.erase(std::find(fromVertex.neighbors.begin(),
-										 fromVertex.neighbors.end(), to));
+		fromVertex.neighbors.end(), to));
 }
 
 template <typename VertexData_t>
-double Graph<VertexData_t>::GetEdgeWeight(const std::string &from,
-										  const std::string &to)
+double Graph<VertexData_t>::GetEdgeWeight(const std::string& from,
+	const std::string& to)
 {
 	typename std::unordered_map<std::string, Vertex<VertexData_t>>::iterator
 		fromVertex = GetVertex(from);
@@ -287,11 +287,11 @@ double Graph<VertexData_t>::GetEdgeWeight(const std::string &from,
 	if (fromVertex == vertexes.end())
 	{
 		throw std::runtime_error("edge from " + from + " to " + to +
-								 " doesn't exist");
+			" doesn't exist");
 	}
 
 	for (auto vertex = fromVertex->second.neighbors.begin();
-		 vertex != fromVertex->second.neighbors.end(); vertex++)
+		vertex != fromVertex->second.neighbors.end(); vertex++)
 	{
 		if (*vertex == to)
 		{
@@ -303,30 +303,30 @@ double Graph<VertexData_t>::GetEdgeWeight(const std::string &from,
 	if (!isToVertexExists)
 	{
 		throw std::runtime_error("edge from " + from + " to " + to +
-								 " doesn't exist");
+			" doesn't exist");
 	}
 
 	return fromVertex->second
-		.weights[fromVertex->second.neighbors.begin() - toVertex];
+		.weights[to];
 }
 
 template <typename VertexData_t>
-void Graph<VertexData_t>::SetEdgeWeight(const std::string &from,
-										const std::string &to, double w)
+void Graph<VertexData_t>::SetEdgeWeight(const std::string& from,
+	const std::string& to, double w)
 {
 	typename std::unordered_map<std::string, Vertex<VertexData_t>>::iterator
 		fromVertex = GetVertex(from);
 	typename std::vector<std::string>::iterator toVertex;
-	bool isToVertexExists;
+	bool isToVertexExists = false;
 
 	if (fromVertex == vertexes.end())
 	{
 		throw std::runtime_error("edge from " + from + " to " + to +
-								 " doesn't exist");
+			" doesn't exist");
 	}
 
 	for (auto vertex = fromVertex->second.neighbors.begin();
-		 vertex != fromVertex->second.neighbors.end(); vertex++)
+		vertex != fromVertex->second.neighbors.end(); vertex++)
 	{
 		if (*vertex == to)
 		{
@@ -338,11 +338,11 @@ void Graph<VertexData_t>::SetEdgeWeight(const std::string &from,
 	if (!isToVertexExists)
 	{
 		throw std::runtime_error("edge from " + from + " to " + to +
-								 " doesn't exist");
+			" doesn't exist");
 	}
 
 	fromVertex->second
-		.weights[fromVertex->second.neighbors.begin() - toVertex] = w;
+		.weights[to] = w;
 }
 
 template <typename VertexData_t>
@@ -350,7 +350,7 @@ std::vector<std::string> Graph<VertexData_t>::GetAllVertexes()
 {
 	std::vector<std::string> result;
 
-	for (auto &e : vertexes)
+	for (auto& e : vertexes)
 	{
 		result.push_back(e.first);
 	}
